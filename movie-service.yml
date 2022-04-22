@@ -1,21 +1,41 @@
 spring:
   application:
     name: movie-service
+
+  mvc:
+    log-request-details: true
+
+  zipkin:
+    base-url: http://localhost:9411/
+    enabled: true
+
+  #ddbb SQL
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/movie_database
     username: root
-    password: p4ssw0rd
+    password: root
   sql:
     init:
       mode: always
       dataLocations: classpath:/movie-service.sql
+
+  #rabbitMQ
+  rabbitmq:
+    username: guest
+    password: guest
+    host: localhost
+    port: 5672
+
   jpa:
     deferDatasourceInitialization: true
+    show-sql: true
     hibernate:
       ddlAuto: create-drop
+
 server:
-  port: 8061
+  port: 8081
+
 eureka:
   client:
     fetchRegistry: false
@@ -24,3 +44,15 @@ eureka:
       defaultZone: http://localhost:8761/eureka
   instance:
     preferIpAddress: true
+
+#pilas de pelis
+queue:
+  movie:
+    name: MovieQueue
+
+message: Se agregó exitosamente una película!
+
+#errores
+logging:
+  level:
+    org.springframework.security: DEBUG

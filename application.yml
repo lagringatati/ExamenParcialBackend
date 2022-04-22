@@ -12,3 +12,7 @@ management:
   info:
     env:
       enabled: true
+
+  health:
+    circuitbreakers:
+      enabled: true

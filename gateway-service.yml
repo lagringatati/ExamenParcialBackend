@@ -1,6 +1,7 @@
 spring:
   application:
     name: gateway-service
+
   cloud:
     gateway:
       discovery:
@@ -11,11 +12,46 @@ spring:
         - id: movie-service-route
           uri: lb://movie-service
           predicates:
-            - Path=/movie/**
-        - id: catalog-service
+            - Path=/movies/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: moviesService
+                fallbackUri: forward:/fallback/movies
+          - id: serie-service-route
+            uri: lb://serie-service
+            predicates:
+              - Path=/series/**
+            filters:
+              - name: CircuitBreaker
+                args:
+                  name: seriesService
+                  fallbackUri: forward:/fallback/series
+        - id: catalog-service-route
           uri: lb://catalog-service
           predicates:
             - Path=/catalog/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: catalogService
+                fallbackUri: forward:/fallback/catalog
+      default-filters:
+        - OIDCTokenRelay
+#seguridad auth=
+  security:
+    oauth2:
+      client:
+        provider:
+          google:
+            issuer-uri: https://accounts.google.com
+        registration:
+          google:
+            client-id:
+            client-secret:
+            scope: openid
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
+
 server:
   port: 8080
 eureka:
@@ -27,4 +63,18 @@ eureka:
   instance:
     preferIpAddress: true
 
+#pila de rtas
+queue:
+  movie:
+    name: MovieQueue
+  serie:
+    name: SerieQueue
 
+#errores
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        cloud:
+          gateway: TRACE

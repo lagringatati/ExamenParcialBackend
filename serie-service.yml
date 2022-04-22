@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: serie-service
+
+  mvc:
+    log-request-details: true
+
+  zipkin:
+    base-url: http://localhost:9411/
+    enabled: true
+
+  #ddbb noSQL
+  data:
+    mongodb:
+      #database: BookStore
+      authentication-database: admin
+      uri: mongodb://localhost:27017/series
+      repositories:
+        enabled: true
+  #datasource:
+  #  driverClassName: com.mysql.cj.jdbc.Driver
+  #  url: jdbc:mysql://localhost:3306/serie_database
+  #  username: root
+  #  password: root
+  #jpa:
+  #  deferDatasourceInitialization: true
+  #  show-sql: true
+  #  hibernate:
+  #    ddlAuto: create-drop
+
+  #rabbitMQ
+  rabbitmq:
+    username: guest
+    password: guest
+    host: localhost
+    port: 5672
+
+
+server:
+  port: 8083
+
+eureka:
+  client:
+    fetchRegistry: false
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    preferIpAddress: true
+
+#pilas de series
+queue:
+  serie:
+    name: SerieQueue
+
+message: Se agregó exitosamente una serie!
+
+#errores
+logging:
+  level:
+    org.springframework.security: DEBUG
